@@ -2,7 +2,6 @@
 
 # 检查config.sh是否存在
 if [ -f "config.sh" ]; then
-    echo "config.sh文件已存在，加载参数..."
     source config.sh
 else
     echo "config.sh文件不存在，开始下载..."
@@ -65,8 +64,7 @@ cleanup_logs() {
 cleanup_logs
 
 # 检查种子是否符合指定的分类和标签
-if [ "$torrent_category" == "$expected_category" ]; then
-    log_message "种子 $torrent_hash 符合指定的分类和标签。"
+if [ "$torrent_category" == "$expected_category" ] && [ "$torrent_tag" == "$expected_tag" ]; then
     # 符合条件，设置分享率上限
     curl -s "$qbittorrent_url/api/v2/torrents/setShareLimits" \
          --header 'Content-Type: application/x-www-form-urlencoded' \
