@@ -41,9 +41,3 @@ fi
 echo "配置已保存到config.sh文件中"
 
 echo "$qbittorrent_url / $qbittorrent_user / $qbittorrent_password / $expected_category / $expected_tag / $torrent_tag / $torrent_category"
-
-# 下载scrip.sh文件
-if [ ! -f "script.sh" ]; then
-    echo "下载脚本文件"
-    curl -s -o script.sh https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/script.sh
-fi
