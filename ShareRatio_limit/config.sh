@@ -86,6 +86,7 @@ while true; do
 					echo "expected_tag=\"$expected_tag\"" >> config.sh
 					echo "target_share_ratio_limit=\"$target_share_ratio_limit\"" >> config.sh
 					echo "配置已保存到config.sh文件中"
+     					exit
 				else
 					echo "连接失败，请检查设置！"
 				fi
