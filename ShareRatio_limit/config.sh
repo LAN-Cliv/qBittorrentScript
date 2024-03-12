@@ -9,22 +9,47 @@ echo "-------------------------------------------------------"
 echo "请输入qBittorrent的URL（示例：http://192.168.50.22:8080）："
 read qbittorrent_url
 
+while [ -z "$qbittorrent_url" ]; do
+    echo "未输入任何内容，请重新输入："
+    read -r qbittorrent_url
+done
+
 echo "请输入qBittorrent的用户名："
 read qbittorrent_user
+
+while [ -z "$qbittorrent_user" ]; do
+    echo "未输入任何内容，请重新输入："
+    read -r qbittorrent_user
+done
 
 echo "请输入qBittorrent的密码："
 read qbittorrent_password
 
+while [ -z "$qbittorrent_password" ]; do
+    echo "未输入任何内容，请重新输入："
+    read -r qbittorrent_password
+done
+
 echo "请输入希望限制的种子分类：（例如：动漫）"
 echo "如果不使用分类请输入：A"
+echo "默认为A"
 read expected_category
-
+if [ -z "$expected_category" ]; then
+    expected_category="A"
+fi
 echo "请输入希望限制的种子标签：（例如：BT）"
 echo "如果不使用标签请输入：A"
+echo "默认为A"
 read expected_tag
-
+if [ -z "$expected_tag" ]; then
+    expected_tag="A"
+fi
 echo "请输入希望限制种子的最大分享率：(仅限数字)"
+echo "默认为 3"
 read target_share_ratio_limit
+if [ -z "$target_share_ratio_limit" ]; then
+    target_share_ratio_limit="3"
+fi
 
 #确定输入内容
 echo "-------------------------------------------------------"
