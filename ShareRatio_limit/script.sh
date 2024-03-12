@@ -1,15 +1,42 @@
 #!/bin/bash
 
-# script.sh
+# 检查config.sh是否存在
+if [ -f "config.sh" ]; then
+    echo "config.sh文件已存在，加载参数..."
+    source config.sh
+else
+    echo "config.sh文件不存在，开始下载..."
+    # 从GitHub下载config.sh文件
+    curl -s -o config.sh https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh
+    if [ $? -eq 0 ]; then		
+        echo "config.sh文件下载成功！"
+		source config.sh
+    else
+        echo "下载失败，请检查网络连接或手动下载文件。"
+		echo "下载地址：https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh"
+        exit 1
+    fi
+fi
 
 # 设置时区
 export TZ=Asia/Shanghai
 
-# 配置文件路径
-config_file="./config.sh"
+#传入种子哈希值
+torrent_hash=$1
 
-# 加载配置文件
-source "$config_file"
+#判断分类与标签值
+if [ "$expected_category" == "A" ]; then
+    torrent_category="A"
+else
+    torrent_category=$2
+fi
+
+if [ "$expected_category" == "A" ]; then
+    torrent_tag="A"
+else
+    torrent_tag=$3
+fi
+
 
 # 登录qBittorrent并获取SID
 login_response=$(curl -s -i --header "Referer: $qbittorrent_url" --data "username=$qbittorrent_user&password=$qbittorrent_password" "$qbittorrent_url/api/v2/auth/login")
@@ -20,7 +47,7 @@ seeding_time_limit=-1
 inactive_seeding_time_limit=-1
 
 # 日志目录和文件名
-log_dir="./ShareRatio"
+log_dir="./ShareLimits"
 log_file="${log_dir}/$(date '+%Y-%m-%d')-setShareLimits.log"
 
 # 确保日志目录存在
