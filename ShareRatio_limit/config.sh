@@ -87,8 +87,8 @@ while true; do
 					echo "expected_tag=\"$expected_tag\"" >> config.sh
 					echo "target_share_ratio_limit=\"$target_share_ratio_limit\"" >> config.sh
 					echo "配置已保存到config.sh文件中"
-     					echo "请将以下目录路径信息填入qbittorrent的相关设置中"
-     					echo "当前文件路径为：$config_dir/scritp.sh "
+     					echo "请将以下信息填入qbittorrent的相关设置中"
+     					echo "复制引号内所有信息'bash $config_dir/scritp.sh %I %L %G'"
      					exit
 				else
 					echo "连接失败，请检查设置！"
