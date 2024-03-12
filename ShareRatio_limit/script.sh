@@ -45,8 +45,12 @@ sid=$(echo "$login_response" | awk 'tolower($0) ~ /set-cookie: sid=/ {split($0,a
 seeding_time_limit=-1
 inactive_seeding_time_limit=-1
 
+# 获取脚本所在目录的绝对路径
+script_dir=$(dirname "$(realpath "$0")")
+
 # 日志目录和文件名
-log_dir="./ShareLimits"
+log_dir="${script_dir}/ShareLimits"
+
 log_file="${log_dir}/$(date '+%Y-%m-%d')-setShareLimits.log"
 
 # 确保日志目录存在
