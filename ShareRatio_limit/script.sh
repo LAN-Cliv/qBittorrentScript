@@ -23,6 +23,10 @@ export TZ=Asia/Shanghai
 #传入种子哈希值
 torrent_hash=$1
 
+echo "$1 1"
+echo "$2 2"
+echo "$3 3"
+
 #判断分类与标签值
 if [ "$expected_category" == "A" ]; then
     torrent_category="A"
@@ -30,20 +34,24 @@ else
     torrent_category=$2
 fi
 
-if [ "$expected_category" == "A" ]; then
+echo "$expected_category expected_category"
+echo "$torrent_category torrent_category"
+
+if [ "$expected_tag" == "A" ]; then
     torrent_tag="A"
 else
     torrent_tag=$3
 fi
 
+echo "$expected_tag expected_tag"
+echo "$torrent_tag torrent_tag"
 
 # 登录qBittorrent并获取SID
 login_response=$(curl -s -i --header "Referer: $qbittorrent_url" --data "username=$qbittorrent_user&password=$qbittorrent_password" "$qbittorrent_url/api/v2/auth/login")
+# 传入SID
 sid=$(echo "$login_response" | awk 'tolower($0) ~ /set-cookie: sid=/ {split($0,a,"SID="); split(a[2],b,";"); print b[1]; exit}')
 
-# 分享率上限设置
-seeding_time_limit=-1
-inactive_seeding_time_limit=-1
+echo "$sid"
 
 # 获取脚本所在目录的绝对路径
 script_dir=$(dirname "$(realpath "$0")")
@@ -67,12 +75,18 @@ cleanup_logs() {
 }
 cleanup_logs
 
+# 播种时间限制，-1 表示不限制
+seeding_time_limit=-1
+# 无活动播种时间限制，-1 表示不限制
+inactive_seeding_time_limit=-1
+
 # 检查种子是否符合指定的分类和标签
 if [ "$torrent_category" == "$expected_category" ] && [ "$torrent_tag" == "$expected_tag" ]; then
+    #log_message "种子 $torrent_hash 符合指定的分类和标签。"
     # 符合条件，设置分享率上限
     curl -s "$qbittorrent_url/api/v2/torrents/setShareLimits" \
          --header 'Content-Type: application/x-www-form-urlencoded' \
-         --header "Cookie: SID=$sid" \
+		 --header "Cookie: SID=$sid" \
          --data-urlencode "hashes=$torrent_hash" \
          --data-urlencode "ratioLimit=$target_share_ratio_limit" \
          --data-urlencode "seedingTimeLimit=$seeding_time_limit" \
