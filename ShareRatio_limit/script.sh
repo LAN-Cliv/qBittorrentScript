@@ -23,10 +23,6 @@ export TZ=Asia/Shanghai
 #传入种子哈希值
 torrent_hash=$1
 
-echo "$1 1"
-echo "$2 2"
-echo "$3 3"
-
 #判断分类与标签值
 if [ "$expected_category" == "A" ]; then
     torrent_category="A"
@@ -34,8 +30,6 @@ else
     torrent_category=$2
 fi
 
-echo "$expected_category expected_category"
-echo "$torrent_category torrent_category"
 
 if [ "$expected_tag" == "A" ]; then
     torrent_tag="A"
@@ -43,15 +37,11 @@ else
     torrent_tag=$3
 fi
 
-echo "$expected_tag expected_tag"
-echo "$torrent_tag torrent_tag"
 
 # 登录qBittorrent并获取SID
 login_response=$(curl -s -i --header "Referer: $qbittorrent_url" --data "username=$qbittorrent_user&password=$qbittorrent_password" "$qbittorrent_url/api/v2/auth/login")
 # 传入SID
 sid=$(echo "$login_response" | awk 'tolower($0) ~ /set-cookie: sid=/ {split($0,a,"SID="); split(a[2],b,";"); print b[1]; exit}')
-
-echo "$sid"
 
 # 获取脚本所在目录的绝对路径
 script_dir=$(dirname "$(realpath "$0")")
