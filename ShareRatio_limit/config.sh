@@ -5,7 +5,7 @@ clear
 config_dir=$(dirname "$(realpath "$0")")
 echo "-------------------------------------------------------"
 echo "配置仅第一次执行脚本时需要设定，后续若需要修改"
-echo "请修改脚本同目录下的“config.sh”文件，或删除文件重新配置。"
+echo "请修改脚本./scriptconfig目录下的“config.sh”文件，或删除文件重新配置。"
 echo "-------------------------------------------------------"
 echo "请输入qBittorrent的内网IP+端口（示例：http://192.168.50.22:8080）："
 read qbittorrent_url
@@ -89,11 +89,6 @@ while true; do
 					echo "配置已保存到config.sh文件中"
 					echo "请将以下信息填入qbittorrent的相关设置中"
 					echo "复制引号内所有信息'bash $config_dir/script.sh %I %L %G'填入'新增torrent时运行外部程序'"
-     					#增加执行权限
-	  				chmod 755 config.sh
-     					chmod 755 script.sh
-				 	chown 65534:100 script.sh
-					chown 65534:100 config.sh
 					exit
 				else
 					echo "连接失败，请检查设置！将重新执行脚本"
