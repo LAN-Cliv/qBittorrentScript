@@ -89,6 +89,7 @@ while true; do
 					echo "配置已保存到config.sh文件中"
 					echo "请将以下信息填入qbittorrent的相关设置中"
 					echo "复制引号内所有信息'bash $config_dir/script.sh %I %L %G'填入'新增torrent时运行外部程序'"
+     					chmod 755 script.sh
 					exit
 				else
 					echo "连接失败，请检查设置！将重新执行脚本"
