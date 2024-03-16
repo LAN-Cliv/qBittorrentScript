@@ -1,15 +1,17 @@
 #!/bin/bash
 
 # 检查config.sh是否存在
-if [ -f "config.sh" ]; then
-    source config.sh
+pwd
+
+if [ -f "/config/qBittorrent/config.sh" ]; then
+    source /config/qBittorrent/config.sh
 else
     echo "config.sh文件不存在，开始下载..."
     # 从GitHub下载config.sh文件
     curl -s -o config.sh https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh
     if [ $? -eq 0 ]; then		
         echo "config.sh文件下载成功！"
-		source config.sh
+		source /config/qBittorrent/config.sh
     else
         echo "下载失败，请检查网络连接或手动下载文件。"
 		echo "下载地址：https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh"
