@@ -24,6 +24,7 @@ export TZ=Asia/Shanghai
 
 #传入种子哈希值
 torrent_hash=$1
+torrent_name=$4
 
 #判断分类与标签值
 if [ "$expected_category" == "A" ]; then
@@ -87,8 +88,8 @@ if [ "$torrent_category" == "$expected_category" ] && [ "$torrent_tag" == "$expe
          --data-urlencode "seedingTimeLimit=$seeding_time_limit" \
          --data-urlencode "inactiveSeedingTimeLimit=$inactive_seeding_time_limit"
          
-    log_message "成功设置种子 $torrent_hash 的分享率上限为 $target_share_ratio_limit。"
-	[[ $tg_massage -eq 1 ]] && $sendtg"成功设置种子 $4 的分享率上限为 $target_share_ratio_limit。"
+    log_message "成功设置种子 $torrent_name 的分享率上限为 $target_share_ratio_limit。"
+	[[ $tg_massage -eq 1 ]] && $sendtg"成功设置种子 $torrent_name 的分享率上限为 $target_share_ratio_limit。"
 else
     log_message "种子 $torrent_hash 不符合指定的分类和标签，跳过。"
 fi
