@@ -31,6 +31,45 @@ while [ -z "$qbittorrent_password" ]; do
     read -r qbittorrent_password
 done
 
+#TG消息开启状态判断
+echo "是否开启Telegram消息通知，输入'1'为开启"
+read tg_massage
+while [ -z "$tg_massage" ]; do
+    echo "未输入任何内容，请重新输入："
+    read -r tg_massage
+done
+
+[[ $tg_massage -eq 1 ]] && {
+    echo "请输入Telegram_Bot的Token值"
+	read tg_token
+    while [ -z "$tg_token" ]; do
+		echo "未输入任何内容，请重新输入："
+		read -r tg_token
+	done
+	
+	echo "请输入个人Chat ID"
+	read tg_chatid
+    while [ -z "$tg_chatid" ]; do
+		echo "未输入任何内容，请重新输入："
+		read -r tg_chatid
+	done
+}
+
+[[ $tg_massage -eq 1 ]] && {
+    echo "开启消息代理（示例：http://192.168.50.1:3333）"
+	read tg_proxy
+    while [ -z "$tg_proxy" ]; do
+		echo "未输入任何内容，请重新输入："
+		read -r tg_proxy
+	done
+}
+
+if [ $tg_massage -eq 1 ]; then
+    tgmsopen="开启"
+else
+    tgmsopen="关闭"
+fi
+
 echo "请输入希望限制的种子分类：（例如：动漫）"
 echo "如果不使用分类请输入：A"
 echo "默认为A"
@@ -60,6 +99,7 @@ echo "当前设定的qbittorrent_password为：$qbittorrent_password"
 echo "当前设定的种子分类为：$expected_category"
 echo "当前设定的种子标签为：$expected_tag"
 echo "当前设定的分享率为：$target_share_ratio_limit"
+echo "当前Telegram消息通知状态为$tgmsopen"
 echo "-------------------------------------------------------"
 
 while true; do
@@ -86,9 +126,14 @@ while true; do
 					echo "expected_category=\"$expected_category\"" >> config.sh
 					echo "expected_tag=\"$expected_tag\"" >> config.sh
 					echo "target_share_ratio_limit=\"$target_share_ratio_limit\"" >> config.sh
+					#判断TG消息状态并添加相关定义
+					[[ $tg_massage -eq 1 ]] && echo "tg_massage=\"$tg_massage\"" >> config.sh
+					[[ $tg_massage -eq 1 ]] && echo "tg_token=\"$tg_token\"" >> config.sh
+					[[ $tg_massage -eq 1 ]] && echo "tg_chatid=\"$tg_chatid\"" >> config.sh
+					[[ $tg_massage -eq 1 ]] && echo "tg_proxy=\"$tg_proxy\"" >> config.sh
 					echo "配置已保存到config.sh文件中"
 					echo "请将以下信息填入qbittorrent的相关设置中"
-					echo "复制引号内所有信息'bash $config_dir/script.sh %I %L %G'填入'新增torrent时运行外部程序'"
+					echo "复制引号内所有信息' bash \$config_dir/script.sh \"%I\" \"%L\" \"%G\" \"%N\" '填入'新增torrent时运行外部程序'"
 					exit
 				else
 					echo "连接失败，请检查设置！将重新执行脚本"
