@@ -39,6 +39,9 @@ else
     torrent_tag=$3
 fi
 
+#TG消息相关
+tg_api="https://api.telegram.org/bot$tg_token/sendMessage"
+sendtg="curl -s -x $tg_proxy -X POST $tg_api -d chat_id=$tg_chatid -d text="
 
 # 登录qBittorrent并获取SID
 login_response=$(curl -s -i --header "Referer: $qbittorrent_url" --data "username=$qbittorrent_user&password=$qbittorrent_password" "$qbittorrent_url/api/v2/auth/login")
@@ -85,6 +88,7 @@ if [ "$torrent_category" == "$expected_category" ] && [ "$torrent_tag" == "$expe
          --data-urlencode "inactiveSeedingTimeLimit=$inactive_seeding_time_limit"
          
     log_message "成功设置种子 $torrent_hash 的分享率上限为 $target_share_ratio_limit。"
+	[[ $tg_massage -eq 1 ]] && $sendtg"成功设置种子 $4 的分享率上限为 $target_share_ratio_limit。"
 else
     log_message "种子 $torrent_hash 不符合指定的分类和标签，跳过。"
 fi
