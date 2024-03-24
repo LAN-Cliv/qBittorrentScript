@@ -2,7 +2,7 @@
 
 # 设置qBittorrent的URL和登录凭据
 clear
-
+config_dir=$(dirname "$(realpath "$0")")
 echo "-------------------------------------------------------"
 echo "配置仅第一次执行脚本时需要设定，后续若需要修改"
 echo "请修改脚本./scriptconfig目录下的“config.sh”文件，或删除文件重新配置。"
@@ -33,10 +33,10 @@ done
 
 echo "请输入QBdocker的映射容器内目录："
 echo "举例：宿主机目录为/mnt/qbittorrent"
-echo "		docker内目录为/config"
-echo "		完整映射为/mnt/qbittorrent:/config"
-echo "		则填入/config"
-echo "		请慎重填写路径，确保为映射的容器内目录路径，否则部分情况下本脚本可能丢失！"
+echo "  docker内目录为/config"
+echo "  完整映射为/mnt/qbittorrent:/config"
+echo "  则填入/config"
+echo "  请慎重填写路径，确保为映射的容器内目录路径，否则部分情况下本脚本可能丢失！"
 read -p "请输入目录路径： " scriptpath
 
 while [ -z "$scriptpath" ] || [ ! -d "$scriptpath" ]; do
@@ -149,7 +149,7 @@ while true; do
 					echo "配置已保存到$scriptpath/config.sh文件中"
 					echo "请将以下信息填入qbittorrent的相关设置中"
 					echo "复制引号内所有信息' bash $scriptpath/script.sh \"%I\" \"%L\" \"%G\" \"%N\" '填入'新增torrent时运行外部程序'"
-					if [ "$scriptpath/script.sh" != "$scriptpath/script.sh" ]; then
+					if [ "$config_dir/script.sh" != "$scriptpath/script.sh" ]; then
 					    # 移动文件
 	 				echo "移动script.sh文件到$scriptpath目录下"
 					    mv script.sh "$scriptpath/script.sh"
@@ -157,7 +157,11 @@ while true; do
 					    echo "源文件路径和目标文件路径相同，无需移动。"
 					fi
 					sleep 2
+     					if [ "$config_dir/config.sh" != "$scriptpath/config.sh" ]; then
+	  				#若目录路径不一致，则删除本config文件
 					rm "$0"
+     					else
+	  				fi
 					exit 1
 				else
 					echo "连接失败，请检查设置！将重新执行脚本"
