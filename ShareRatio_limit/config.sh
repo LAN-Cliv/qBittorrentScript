@@ -149,7 +149,13 @@ while true; do
 					echo "配置已保存到$scriptpath/config.sh文件中"
 					echo "请将以下信息填入qbittorrent的相关设置中"
 					echo "复制引号内所有信息' bash $scriptpath/script.sh \"%I\" \"%L\" \"%G\" \"%N\" '填入'新增torrent时运行外部程序'"
-					mv script.sh $scriptpath/script.sh
+					if [ "$scriptpath/script.sh" != "$scriptpath/script.sh" ]; then
+					    # 移动文件
+	 				echo "移动script.sh文件到$scriptpath目录下"
+					    mv script.sh "$scriptpath/script.sh"
+					else
+					    echo "源文件路径和目标文件路径相同，无需移动。"
+					fi
 					sleep 2
 					rm "$0"
 					exit 1
