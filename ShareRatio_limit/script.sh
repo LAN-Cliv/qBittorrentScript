@@ -1,15 +1,17 @@
 #!/bin/bash
 
+#加载本地config.sh文件
+source ./config.sh
 # 检查config.sh是否存在
-
 if [ -f "$scriptpath/config.sh" ]; then
-    source $scriptpath/config.sh
+    echo "脚本开始运行"
 else
     echo "config.sh文件不存在，开始下载..."
     # 从GitHub下载config.sh文件
 	curl -s -o config.sh https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh
     if [ $? -eq 0 ]; then		
         echo "config.sh文件下载成功！"
+		chmod +x config.sh
 		./config.sh
 		exit 1
     else
