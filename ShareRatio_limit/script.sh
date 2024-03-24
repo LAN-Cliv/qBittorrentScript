@@ -1,22 +1,22 @@
 #!/bin/bash
 
-#加载本地config.sh文件
-source ./config.sh
-# 检查config.sh是否存在
-if [ -f "$scriptpath/config.sh" ]; then
-    echo "脚本开始运行"
+# 检查本地是否存在 config.sh 文件
+if [ -f "./config.sh" ]; then
+    source ./config.sh
+elif [ -f "$scriptpath/config.sh" ]; then
+    source "$scriptpath/config.sh"
 else
-    echo "config.sh文件不存在，开始下载..."
+    echo "本地和指定路径下的 config.sh 文件都不存在，开始下载..."
     # 从GitHub下载config.sh文件
-	curl -s -o config.sh https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh
-    if [ $? -eq 0 ]; then		
+    curl -s -o config.sh https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh
+    if [ $? -eq 0 ]; then        
         echo "config.sh文件下载成功！"
-		chmod +x config.sh
-		./config.sh
-		exit 1
+        chmod +x config.sh
+        ./config.sh
+        exit 1
     else
         echo "下载失败，请检查网络连接或手动下载文件。"
-		echo "下载地址：https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh"
+        echo "下载地址：https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh"
         exit 1
     fi
 fi
