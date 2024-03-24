@@ -161,6 +161,7 @@ while true; do
 	  				#若目录路径不一致，则删除本config文件
 					rm "$0"
      					else
+	  				   echo "config文件路径一致，不删除"
 	  				fi
 					exit 1
 				else
