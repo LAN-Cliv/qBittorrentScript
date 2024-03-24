@@ -10,7 +10,8 @@ else
 	curl -s -o config.sh https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh
     if [ $? -eq 0 ]; then		
         echo "config.sh文件下载成功！"
-		source ./config.sh
+		./config.sh
+		exit 1
     else
         echo "下载失败，请检查网络连接或手动下载文件。"
 		echo "下载地址：https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh"
