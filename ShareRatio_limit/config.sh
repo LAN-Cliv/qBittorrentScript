@@ -31,6 +31,19 @@ while [ -z "$qbittorrent_password" ]; do
     read -r qbittorrent_password
 done
 
+echo "请输入QBdocker的映射容器内目录："
+echo "举例：宿主机目录为/mnt/qbittorrent"
+echo "		docker内目录为/config"
+echo "		完整映射为/mnt/qbittorrent:/config"
+echo "		则填入/config"
+echo "		请慎重填写路径，确保为映射的容器内目录路径，否则部分情况下本脚本可能丢失！"
+read -p "请输入目录路径： " scriptpath
+
+while [ -z "$scriptpath" ] || [ ! -d "$scriptpath" ]; do
+    echo "未输入有效的目录路径，请重新输入："
+    read -r scriptpath
+done
+
 #TG消息开启状态判断
 echo "是否开启Telegram消息通知，输入'1'为开启"
 read tg_massage
@@ -99,6 +112,7 @@ echo "当前设定的qbittorrent_password为：$qbittorrent_password"
 echo "当前设定的种子分类为：$expected_category"
 echo "当前设定的种子标签为：$expected_tag"
 echo "当前设定的分享率为：$target_share_ratio_limit"
+echo "当前设定的脚本目录为：$scriptpath"
 echo "当前Telegram消息通知状态为$tgmsopen"
 echo "-------------------------------------------------------"
 
@@ -120,20 +134,22 @@ while true; do
 				# 检查curl的返回值
 				if [ $? -eq 0 ]; then
 					echo "连接成功"
-					echo "qbittorrent_url=\"$qbittorrent_url\"" > config.sh
-					echo "qbittorrent_user=\"$qbittorrent_user\"" >> config.sh
-					echo "qbittorrent_password=\"$qbittorrent_password\"" >> config.sh
-					echo "expected_category=\"$expected_category\"" >> config.sh
-					echo "expected_tag=\"$expected_tag\"" >> config.sh
-					echo "target_share_ratio_limit=\"$target_share_ratio_limit\"" >> config.sh
+					echo "qbittorrent_url=\"$qbittorrent_url\"" > $scriptpath/config.sh
+					echo "qbittorrent_user=\"$qbittorrent_user\"" >> $scriptpath/config.sh
+					echo "qbittorrent_password=\"$qbittorrent_password\"" >> $scriptpath/config.sh
+					echo "expected_category=\"$expected_category\"" >> $scriptpath/config.sh
+					echo "expected_tag=\"$expected_tag\"" >> $scriptpath/config.sh
+					echo "target_share_ratio_limit=\"$target_share_ratio_limit\"" >> $scriptpath/config.sh
+					echo "scriptpath=\"$scriptpath\"" >> $scriptpath/config.sh
 					#判断TG消息状态并添加相关定义
-					[[ $tg_massage -eq 1 ]] && echo "tg_massage=\"$tg_massage\"" >> config.sh
-					[[ $tg_massage -eq 1 ]] && echo "tg_token=\"$tg_token\"" >> config.sh
-					[[ $tg_massage -eq 1 ]] && echo "tg_chatid=\"$tg_chatid\"" >> config.sh
-					[[ $tg_massage -eq 1 ]] && echo "tg_proxy=\"$tg_proxy\"" >> config.sh
-					echo "配置已保存到config.sh文件中"
+					[[ $tg_massage -eq 1 ]] && echo "tg_massage=\"$tg_massage\"" >> $scriptpath/config.sh
+					[[ $tg_massage -eq 1 ]] && echo "tg_token=\"$tg_token\"" >> $scriptpath/config.sh
+					[[ $tg_massage -eq 1 ]] && echo "tg_chatid=\"$tg_chatid\"" >> $scriptpath/config.sh
+					[[ $tg_massage -eq 1 ]] && echo "tg_proxy=\"$tg_proxy\"" >> $scriptpath/config.sh
+					echo "配置已保存到$scriptpath/config.sh文件中"
 					echo "请将以下信息填入qbittorrent的相关设置中"
 					echo "复制引号内所有信息' bash \$config_dir/script.sh \"%I\" \"%L\" \"%G\" \"%N\" '填入'新增torrent时运行外部程序'"
+					mv script.sh $scriptpath/script.sh
 					exit
 				else
 					echo "连接失败，请检查设置！将重新执行脚本"
