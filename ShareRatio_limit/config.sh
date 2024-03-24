@@ -2,7 +2,7 @@
 
 # 设置qBittorrent的URL和登录凭据
 clear
-config_dir=$(dirname "$(realpath "$0")")
+
 echo "-------------------------------------------------------"
 echo "配置仅第一次执行脚本时需要设定，后续若需要修改"
 echo "请修改脚本./scriptconfig目录下的“config.sh”文件，或删除文件重新配置。"
@@ -148,10 +148,11 @@ while true; do
 					[[ $tg_massage -eq 1 ]] && echo "tg_proxy=\"$tg_proxy\"" >> $scriptpath/config.sh
 					echo "配置已保存到$scriptpath/config.sh文件中"
 					echo "请将以下信息填入qbittorrent的相关设置中"
-					echo "复制引号内所有信息' bash \$config_dir/script.sh \"%I\" \"%L\" \"%G\" \"%N\" '填入'新增torrent时运行外部程序'"
+					echo "复制引号内所有信息' bash $scriptpath/script.sh \"%I\" \"%L\" \"%G\" \"%N\" '填入'新增torrent时运行外部程序'"
 					mv script.sh $scriptpath/script.sh
+					sleep 2
 					rm "$0"
-					exit
+					exit 1
 				else
 					echo "连接失败，请检查设置！将重新执行脚本"
 					sleep 2
