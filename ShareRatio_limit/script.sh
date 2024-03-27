@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # 检查本地是否存在 config.sh 文件
-if [ -f "./config.sh" ]; then
-    source ./config.sh
+sdri="$(dirname "$(readlink -f "$0")")"
+if [ -f "$sdri/config.sh" ]; then
+    source $sdri/config.sh
 elif [ -f "$scriptpath/config.sh" ]; then
     source "$scriptpath/config.sh"
 else
