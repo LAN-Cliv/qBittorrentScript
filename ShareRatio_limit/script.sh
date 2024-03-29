@@ -10,7 +10,7 @@ else
     echo "本地和指定路径下的 config.sh 文件都不存在，开始下载..."
 	sleep 2
     # 从GitHub下载config.sh文件
-    curl -s -o config.sh https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh
+    curl -s -o config.sh https://mirror.ghproxy.com/https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/config.sh
     if [ $? -eq 0 ]; then        
         echo "config.sh文件下载成功！"
         chmod +x config.sh
