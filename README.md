@@ -11,5 +11,5 @@
 
 #### 运行方式：
 
-    curl -O https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/script.sh && chmod +x script.sh && ./script.sh
+    curl -O https://mirror.ghproxy.com/https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/script.sh && chmod +x script.sh && ./script.sh
 可以加入        -x http://ip:prot 来进行本地代理加速脚本下载
