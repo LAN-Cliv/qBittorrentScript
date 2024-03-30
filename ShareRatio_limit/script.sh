@@ -1,9 +1,12 @@
 #!/bin/bash
 
 # 检查本地是否存在 config.sh 文件
-sdri="$(dirname "$(readlink -f "$0")")"
-if [ -f "$sdri/config.sh" ]; then
-    source $sdri/config.sh
+
+# 获取脚本所在目录的绝对路径
+script_dir=$(dirname "$(realpath "$0")")
+
+if [ -f "$script_dir/config.sh" ]; then
+    source $script_dir/config.sh
 elif [ -f "$scriptpath/config.sh" ]; then
     source "$scriptpath/config.sh"
 else
@@ -30,6 +33,9 @@ export TZ=Asia/Shanghai
 torrent_hash=$1
 torrent_name=$4
 
+#预处理种子命名
+name=$(echo "$4" | sed 's/[^a-zA-Z0-9[:alnum:]\p{Han}]/ /g')
+
 #判断分类与标签值
 if [ "$expected_category" == "A" ]; then
     torrent_category="A"
@@ -45,16 +51,19 @@ else
 fi
 
 #TG消息相关
+echo_message="成功设置种子 $name 的分享率上限为 $target_share_ratio_limit。"
 tg_api="https://api.telegram.org/bot$tg_token/sendMessage"
-sendtg="curl -s -x $tg_proxy -X POST $tg_api -d chat_id=$tg_chatid -d text="
+#封装发送定义
+sendtg() {
+    curl -s -x "$tg_proxy" -X POST "$tg_api" -d chat_id="$tg_chatid" -d text="$echo_message"
+}
 
 # 登录qBittorrent并获取SID
 login_response=$(curl -s -i --header "Referer: $qbittorrent_url" --data "username=$qbittorrent_user&password=$qbittorrent_password" "$qbittorrent_url/api/v2/auth/login")
 # 传入SID
 sid=$(echo "$login_response" | awk 'tolower($0) ~ /set-cookie: sid=/ {split($0,a,"SID="); split(a[2],b,";"); print b[1]; exit}')
 
-# 获取脚本所在目录的绝对路径
-script_dir=$(dirname "$(realpath "$0")")
+
 
 # 日志目录和文件名
 log_dir="${script_dir}/ShareLimits"
@@ -91,9 +100,11 @@ if [ "$torrent_category" == "$expected_category" ] && [ "$torrent_tag" == "$expe
          --data-urlencode "ratioLimit=$target_share_ratio_limit" \
          --data-urlencode "seedingTimeLimit=$seeding_time_limit" \
          --data-urlencode "inactiveSeedingTimeLimit=$inactive_seeding_time_limit"
-         
-    log_message "成功设置种子 $torrent_name 的分享率上限为 $target_share_ratio_limit。"
-	[[ $tg_massage -eq 1 ]] && $sendtg"成功设置种子 $torrent_name 的分享率上限为 $target_share_ratio_limit。"
+    
+	
+    log_message "$echo_message"
+	echo "$name"
+	[[ $tg_massage -eq 1 ]] && sendtg
 else
     log_message "种子 $torrent_hash 不符合指定的分类和标签，跳过。"
 fi
