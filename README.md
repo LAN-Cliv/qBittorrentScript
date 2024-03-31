@@ -11,5 +11,18 @@
 
 #### 运行方式：
 
+### 1.进入QB的容器控制台终端（假如qb的docker容器名称为qbittorrent）
+SSH的方式：
+
+    docker ps
+    docker exec -it qbittorrent /bin/sh      
+    
+### 2.运行以下命令
+
+利用加速源下载
+
     curl -O https://mirror.ghproxy.com/https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/script.sh && chmod +x script.sh && ./script.sh
-可以加入        -x http://ip:prot 来进行本地代理加速脚本下载
+    
+可以加入 -x http://ip:prot 来进行本地代理加速脚本下载
+
+    curl -x http://ip:prot -O https://raw.githubusercontent.com/LAN-Cliv/qBittorrentScript/main/ShareRatio_limit/script.sh && chmod +x script.sh && ./script.sh
